@@ -1,0 +1,7 @@
+# MATLAB Things
+
+*.asv
+/simulink/src/slprj/
+*.mexw64
+*.slxc
+*.autosave
