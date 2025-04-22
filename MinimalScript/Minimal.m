@@ -2,30 +2,45 @@
 clear; close all;
 
 %% Load audio data from an audio file in double precision
-[x,Fs] = audioread('../TestFiles/fan2.ogg', 'double');
+[x,Fs] = audioread('../Test Files/StillAlive.flac', 'double');
 
-%% Design a linear-phase FIR filter to attenuate all frequencies above 15kHz
+%% Load impulse response audio data from an audio file in double precision
+filt = audioread('../Impulse Responses/InternetIR.wav', 'double');
+filt = filt(:, 1); % Only needed for stereo IR
 
-% Frequencies / Hz
-f = [14e3 15e3];
+%% Show Filter Response
+[mH, mW] = freqz(filt, 2^10);
 
-% Ripple / dB
-passRip = 3;
-stopAtten = 50;
+% Plot
+tiledlayout('vertical');
+nexttile;
 
-rip = [(10^(passRip/20)-1)/(10^(passRip/20)+1) 10^(-stopAtten/20)]; 
+plot(mW/pi, abs(mH), 'k');
+xlabel('\(\omega / (\pi\cdot\unit{\radian\per\samp})\)');
+ylabel('\(\abs{H(\omega)}\)');
+title('Magnitude Response');
+xlim('tight');
+ylim('padded');
+grid on;
 
-% FIR - Parks-McClellan
-[M,fo,ao,w] = firpmord(f,[1 0],rip,Fs);
-filt = firpm(M, fo, ao, w);
+nexttile;
 
-% Show Filter Response
-%freqz(filt);
+plot(mW/pi, unwrap(angle(mH)), 'k');
+xlabel('\(\omega / (\pi\cdot\unit{\radian\per\samp})\)');
+ylabel('\(\Theta(H(\omega)) / \unit{\radian}\)');
+title('Phase Response');
+xlim('tight');
+ylim('padded');
+grid on;
 
 %% Apply Filter
 tic;
 y = filter(filt, 1, x);
+y = y ./ max(y); % Normalize output audio (prevents clipping)
 toc % Measures time to apply filter
 
 %% Play Sound
-%sound(y,Fs);
+sound(y,Fs);
+
+%% Write Output To File
+%audiowrite('../Output Files/output.ogg',y,Fs);
