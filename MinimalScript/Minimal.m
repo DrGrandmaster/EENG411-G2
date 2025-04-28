@@ -5,11 +5,11 @@ clear; close all;
 [x,Fs] = audioread('../Test Files/StillAlive.flac', 'double');
 
 %% Load impulse response audio data from an audio file in double precision
-filt = audioread('../Impulse Responses/InternetIR.wav', 'double');
+filt = audioread('../Impulse Responses/Bunker2025-04-23_1.wav', 'double');
 filt = filt(:, 1); % Only needed for stereo IR
 
 %% Show Filter Response
-[mH, mW] = freqz(filt, 2^10);
+[mH, mW] = freqz(filt, 2^20);
 
 % Plot
 tiledlayout('vertical');
@@ -40,7 +40,7 @@ y = y ./ max(y); % Normalize output audio (prevents clipping)
 toc % Measures time to apply filter
 
 %% Play Sound
-sound(y,Fs);
+%sound(y,Fs);
 
 %% Write Output To File
-%audiowrite('../Output Files/output.ogg',y,Fs);
+audiowrite('../Output Files/output.ogg',y,Fs);
