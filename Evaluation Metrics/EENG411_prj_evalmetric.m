@@ -50,3 +50,17 @@ samples = 1:min(lx,ly);
   subplot(3,1,3), plot(lag1/fs,C1);
   ylabel("Amplitude"); grid on
    title("Cross-correlation ")
+
+% if it peaks at lag=0 and high correlation, then close match
+[maxCorr, maxIdx] = max(C1);
+lagAtMax = lag1(maxIdx) / Fs;
+fprintf('Max cross-correlation: %.3f at %.3f seconds lag\n', maxCorr, lagAtMax);
+
+
+% spectrogram comparison
+figure;
+subplot(2,1,1); spectrogram(x, 512, [], [], Fs, 'yaxis'); title('Original');
+subplot(2,1,2); spectrogram(y, 512, [], [], Fs, 'yaxis'); title('Real Space Recording');
+
+% run RT60 comparison (reverberation time)
+compareRT60(filt, y, Fs);
