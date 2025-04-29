@@ -15,6 +15,18 @@ filt = filt ./ mean(filt); % Normalize filter
 tiledlayout('vertical');
 nexttile;
 
+plot((0:length(filt) - 1) ./ Fs, filt, 'k');
+xlabel('\(t / \mathrm{s}\)', Interpreter='latex');
+ylabel('\(h\)', Interpreter='latex');
+% xlabel('\(t / (\unit{\second})\)');
+% ylabel('\(h\)');
+title('Impulse Response');
+xlim('tight');
+ylim('padded');
+grid on;
+
+nexttile;
+
 %plot((Fs/2)*(mW/pi), 20*log10(abs(mH)), 'k');
 semilogx((Fs/2)*(mW/pi), 20*log10(abs(mH)), 'k');
 xlabel('\(f / \mathrm{Hz}\)', Interpreter='latex');
@@ -38,5 +50,7 @@ title('Phase Response');
 xlim('tight');
 ylim('padded');
 grid on;
+
+
 
 set(gca, 'fontname', 'CMU Sans');

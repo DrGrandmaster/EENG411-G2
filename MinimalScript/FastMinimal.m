@@ -21,7 +21,7 @@ filt = filt ./ mean(filt); % Normalize filter
 %% Apply Filter
 tic;
 
-% Slow Convolution Based Filtering
+% Slow, Convolution Based Filtering
 %y = filter(filt, 1, x);
 
 % Fast FFT Based Filtering
@@ -45,4 +45,4 @@ pause;
 stop(player);
 
 %% Write Output To File
-%audiowrite(['../Output Files/StillAlive', IR, '.ogg'], y, Fs);
+audiowrite(['../Output Files/StillAlive', IR, '.flac'], y, Fs);
