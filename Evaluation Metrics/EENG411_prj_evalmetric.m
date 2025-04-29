@@ -32,21 +32,18 @@ y = y - mean(y);
 
 
 %% Select Input Audio Filename from Actual Space
-musicInSpace = 'StillAliveActual';
-format = '.flac';
+IR2 = "StillAliveBBW280";
 
 %% Load impulse response audio data of space itself from an audio file in double precision
-impulseSpace = audioread(['../Impulse Responses/', IR, '.wav'], 'double');
+impulseSpace = audioread(['../Impulse Responses/', IR2, '.wav'], 'double');
 
 
-
-[y, Fs]=audioread("StillAliveBBW280.wav");
 lx = length(x);
-ly = length(y);
+ly = length(impulseSpace);
 samples = 1:min(lx,ly);
  subplot(3,1,1), plot (x(samples));
- subplot(3,1,2), plot (y(samples));
- [C1, lag1] = xcorr(x(samples),y(samples));
+ subplot(3,1,2), plot (impulseSpace(samples));
+ [C1, lag1] = xcorr(x(samples),impulseSpace(samples));
   subplot(3,1,3), plot(lag1/fs,C1);
   ylabel("Amplitude"); grid on
    title("Cross-correlation ")
