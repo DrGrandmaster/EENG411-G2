@@ -1,4 +1,4 @@
-%% Minimal Audio Filtering Script
+%% Evaluating Performance of Audio Filtering Script
 clear; close all;
 
 %% Select Input Audio Filename
@@ -10,20 +10,19 @@ IR = 'BBW280_2025-04-28_1';
 
 %% Load audio data from an audio file in double precision
 [x,Fs] = audioread(['../Test Files/', music, format], 'double');
-x = x(:,1) + x(:,2); % Sum channels (convert to mono)
 
 %% Load impulse response audio data from an audio file in double precision
 filt = audioread(['../Impulse Responses/', IR, '.wav'], 'double');
 filt = filt ./ mean(filt); % Normalize filter
 
-%% Show Filter Response
-%freqz(filt, 1, length(filt));
+%% Select Input Measured Response Filename
+MR = 'StillAliveBBW280'; % Double check this is the same space as the IR
+
+%% Load real reverb'd sound
+trueY = audioread(['../Measured Responses/', MR, '.wav'], 'double');
+trueY = trueY ./ max(abs(trueY)); % Normalize real audio
 
 %% Apply Filter
-tic;
-
-% Slow, Convolution Based Filtering
-%y = filter(filt, 1, x);
 
 % Fast FFT Based Filtering
 y = ifft(fft(x) .* fft(padarray(filt,length(x)-length(filt),1,'post')));
@@ -35,12 +34,3 @@ y = y - mean(y);
 % Normalize output audio (prevents clipping)
 y = y ./ max(abs(y));
 
-time = toc; % Measures time to apply filter
-disp(['It took ', sprintf('%.2f', time), ' seconds to apply the reverb.']);
-
-%% Play Sound
-player = audioplayer(y, Fs);
-play(player);
-disp('Press any key to end playback...');
-pause;
-stop(player);
