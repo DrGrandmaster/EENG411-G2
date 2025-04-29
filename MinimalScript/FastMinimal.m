@@ -6,17 +6,17 @@ music = 'StillAlive';
 format = '.flac';
 
 %% Select Input IR Filename
-IR = 'SoundRoom2025-04-28_1';
+IR = 'BBW280_2025-04-28_1';
 
 %% Load audio data from an audio file in double precision
 [x,Fs] = audioread(['../Test Files/', music, format], 'double');
 
 %% Load impulse response audio data from an audio file in double precision
 filt = audioread(['../Impulse Responses/', IR, '.wav'], 'double');
-filt = filt ./ max(abs(filt));
+filt = filt ./ mean(filt); % Normalize filter
 
 %% Show Filter Response
-freqz(filt, length(filt));
+%freqz(filt, 1, length(filt));
 
 %% Apply Filter
 tic;

@@ -2,19 +2,20 @@
 clear; close all;
 
 %% Select Input IR Filename
-%IR = 'Bunker2025-04-23_3';
-IR = 'Marquez2025-04-23_1';
+IR = 'BBW280_2025-04-28_1';
 
 %% Load impulse response audio data from an audio file in double precision
 [filt, Fs] = audioread(['../Impulse Responses/', IR, '.wav'], 'double');
+filt = filt ./ mean(filt); % Normalize filter
 
 %% Show Filter Response
-[mH, mW] = freqz(filt, length(filt));
+[mH, mW] = freqz(filt, 1, 100*length(filt));
 
 % Plot
 tiledlayout('vertical');
 nexttile;
 
+%plot((Fs/2)*(mW/pi), 20*log10(abs(mH)), 'k');
 semilogx((Fs/2)*(mW/pi), 20*log10(abs(mH)), 'k');
 xlabel('\(f / \mathrm{Hz}\)', Interpreter='latex');
 ylabel('\(\left|H(\omega)\right| / \mathrm{dB}\)', Interpreter='latex');
@@ -27,6 +28,7 @@ grid on;
 
 nexttile;
 
+%plot((Fs/2)*(mW/pi), rad2deg(unwrap(angle(mH))), 'k');
 semilogx((Fs/2)*(mW/pi), rad2deg(unwrap(angle(mH))), 'k');
 xlabel('\(f / \mathrm{Hz}\)', Interpreter='latex');
 ylabel('\(\angle H(\omega) / ^{\circ}\)', Interpreter='latex');
