@@ -9,10 +9,15 @@ IR = 'BBW280_2025-04-28_1';
 filt = filt ./ mean(filt); % Normalize filter
 
 %% Show Filter Response
+
+% Calculate Magnitude and Phase Response
 [mH, mW] = freqz(filt, 1, 100*length(filt));
 
+% Calculate Group Delay
+mT = grpdelay(filt, 1, 100*length(filt));
+
 % Plot
-tiledlayout('vertical');
+tiledlayout('flow');
 nexttile;
 
 plot((0:length(filt) - 1) ./ Fs, filt, 'k');
@@ -50,7 +55,3 @@ title('Phase Response');
 xlim('tight');
 ylim('padded');
 grid on;
-
-
-
-set(gca, 'fontname', 'CMU Sans');
