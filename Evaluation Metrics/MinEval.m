@@ -71,3 +71,15 @@ specTrueY = abs(fft(trueY, N));
 scoreSpect = corrcoef(specY, specTrueY);
 scoreSpect = scoreSpect(1, 2);
 disp(['The spectrum of the reverb effect correlates with the spectrum of true reverb with R = ', sprintf('%.2f', scoreSpect), '.']);
+
+%% Apply inverse filter to real sound and compare to original sound
+simX = ifft(fft(trueY) .* ((fft(padarray(filt,length(trueY)-length(filt),1,'post'))).^(-1)));
+simX = simX ./ max(abs(simX)); % Normalize
+
+% Compare True Audio and Processed Audio
+corrSimXtoX = xcorr(simX, x);
+compInv = max(corrSimXtoX);
+
+% Score, based on comparing the peaks of the cross correlations
+scoreInv = compInv / bench;
+disp(['The reverse effect matches the original sound ', sprintf('%.2f', scoreInv*100), '% as well as the original audio matches the dry audio.']);
