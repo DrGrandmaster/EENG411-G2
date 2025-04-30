@@ -17,7 +17,7 @@ filt = filt ./ mean(filt); % Normalize filter
 mT = grpdelay(filt, 1, 100*length(filt));
 
 % Plot
-tiledlayout('flow');
+tiledlayout('vertical');
 nexttile;
 
 plot((0:length(filt) - 1) ./ Fs, filt, 'k');
