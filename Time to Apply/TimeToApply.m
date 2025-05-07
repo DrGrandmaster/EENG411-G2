@@ -45,4 +45,4 @@ for i = 1:N
 
 end
 
-disp(['It took an average of ', sprintf('%.2f', mean(time)), ' seconds to apply the reverb.']);
+disp(['It took an average of ', sprintf('%.6f', mean(time)), ' seconds to apply the reverb.']);
